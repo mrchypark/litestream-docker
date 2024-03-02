@@ -23,7 +23,9 @@ fi
 
 while true; do
   GENERATIONS_OUTPUT=$(litestream generations "${DB_PATH}/${DB_NAME}")
-  if echo "$GENERATIONS_OUTPUT" | awk 'NR>1 {if ($3 ~ /^-/) {found=1}} END {print found ? "true" : "false"}';  then
+  result=$(echo "$GENERATIONS_OUTPUT" | awk 'NR>1 {if ($3 ~ /^-/) {found=1}} END {print found ? "true" : "false"}')
+
+  if [ "$result" = "true" ]; then
     debug_echo "Negative lag detected. Restore Start."
     debug_echo "$GENERATIONS_OUTPUT"
     rm -Rf "${TEMP_PATH}"
