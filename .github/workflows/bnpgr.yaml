@@ -22,7 +22,7 @@ jobs:
       with:
         flavor: |
           latest=false
-        images: ghcr.io/mrchypark/litestream-sqlite
+        images: ghcr.io/mrchypark/litestream-read-replica
         tags: |
           type=semver,pattern={{version}},enable=${{ startsWith(github.ref, 'refs/tags/v') }}
           type=sha,prefix={{branch}}-,enable=${{ !startsWith(github.ref, 'refs/tags/v') }}
