@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 if [ "${DB_PATH}" = "" ]; then
   debug_echo "DB_PATH environment variable is not set or empty. Exiting script."
