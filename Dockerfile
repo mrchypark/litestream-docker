@@ -11,5 +11,6 @@ ENV CHECK_INTERVAL=10
 
 COPY --from=litestream/litestream:0.3.13 /usr/local/bin/litestream /usr/local/bin/litestream
 COPY restore.sh /restore.sh
+RUN chmod +x restore.sh
 ENTRYPOINT ["/restore.sh"]
 CMD []
