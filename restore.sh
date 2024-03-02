@@ -21,8 +21,8 @@ if [ "${REPLICA_PATH}" = "" ]; then
   exit 1
 fi
 
-GENERATIONS_OUTPUT=$(litestream generations "${DB_PATH}/${DB_NAME}")
 while true; do
+  GENERATIONS_OUTPUT=$(litestream generations "${DB_PATH}/${DB_NAME}")
   if echo "$GENERATIONS_OUTPUT" | awk 'NR>1 && $3 ~ /^-/ {found=1; exit} END {if (found) print "true"}'; then
     debug_echo "Negative lag detected. Restore Start."
     debug_echo "$GENERATIONS_OUTPUT"
