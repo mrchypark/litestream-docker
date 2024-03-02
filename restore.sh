@@ -1,5 +1,11 @@
 #!/bin/sh
 
+debug_echo() {
+  if [ "$DEBUG" = "t" ]; then
+    echo "$@"
+  fi
+}
+
 if [ "${DB_PATH}" = "" ]; then
   debug_echo "DB_PATH environment variable is not set or empty. Exiting script."
   exit 1
