@@ -41,8 +41,8 @@ while true; do
     rm -Rf "${TEMP_PATH}"
     mkdir -p "${TEMP_PATH}" 
     litestream restore -o "${TEMP_PATH}/${DB_NAME}" "${REPLICA_PATH}"
-    cp -fRp "${TEMP_PATH}"/* "${DB_PATH}"
     sqlite3 "${DB_PATH}/${DB_NAME}" 'PRAGMA wal_checkpoint(TRUNCATE);'
+    cp -fRp "${TEMP_PATH}"/* "${DB_PATH}"
     rm -Rf "${TEMP_PATH}"
     debug_echo "Restore done."
 
