@@ -38,12 +38,17 @@ while true; do
     fi
     
     debug_echo "$GENERATIONS_OUTPUT"
-    rm -Rf "${TEMP_PATH}"
-    mkdir -p "${TEMP_PATH}" 
-    litestream restore -o "${TEMP_PATH}/${DB_NAME}" "${REPLICA_PATH}"
-    sqlite3 "${DB_PATH}/${DB_NAME}" 'PRAGMA wal_checkpoint(TRUNCATE);'
-    cp -fRp "${TEMP_PATH}"/* "${DB_PATH}"
-    rm -Rf "${TEMP_PATH}"
+    rm -Rf "${SOURCE_TEMP_PATH}"
+    mkdir -p "${SOURCE_TEMP_PATH}" 
+    litestream restore -o "${SOURCE_TEMP_PATH}/${DB_NAME}" "${REPLICA_PATH}"
+    sqlite3 "${SOURCE_TEMP_PATH}/${DB_NAME}" 'PRAGMA wal_checkpoint(TRUNCATE);'
+    
+    ln -sfn "${SOURCE_TEMP_PATH}" "${DB_PATH}"
+
+    cp -fRp "${SOURCE_TEMP_PATH}" "${SOURCE_PATH}"
+    ln -sfn "${SOURCE_PATH}" "${DB_PATH}"
+
+    rm -Rf "${SOURCE_TEMP_PATH}"
     debug_echo "Restore done."
 
     last_execution_time=$(date +%s) # 실행 후 시작 시간 리셋
