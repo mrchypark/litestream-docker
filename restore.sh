@@ -53,6 +53,18 @@ while true; do
     rm -Rf "${SOURCE_TEMP_PATH}"
     debug_echo "Restore done."
 
+    if [ -n "$AFTER_RESTORE_COMMAND" ]; then
+        debug_echo "Executing after restore command: $AFTER_RESTORE_COMMAND"
+        eval "$AFTER_RESTORE_COMMAND"
+        if [ $? -ne 0 ]; then
+            debug_echo "After restore command execution failed with exit code $?."
+        else
+            debug_echo "After restore command execution completed successfully."
+        fi
+    else
+        debug_echo "No after restore command specified. Skipping execution."
+    fi
+
     last_execution_time=$(date +%s) # 실행 후 시작 시간 리셋
   else
     debug_echo "All generations are up-to-date. No action is performed."
