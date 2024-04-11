@@ -38,15 +38,15 @@ while true; do
     fi
     
     debug_echo "$GENERATIONS_OUTPUT"
-    rm -Rf "${SOURCE_TEMP_PATH}"
-    mkdir -p "${SOURCE_TEMP_PATH}" 
-    litestream restore -o "${SOURCE_TEMP_PATH}/${DB_NAME}" "${REPLICA_PATH}"
+    rm -Rf "${TEMP_PATH}"
+    mkdir -p "${TEMP_PATH}" 
+    litestream restore -o "${TEMP_PATH}/${DB_NAME}" "${REPLICA_PATH}"
     
-    sqlite3 "${SOURCE_TEMP_PATH}/${DB_NAME}" 'PRAGMA wal_checkpoint(TRUNCATE);'
-    sqlite3 "${SOURCE_TEMP_PATH}/${DB_NAME}" '.backup "${SOURCE_TEMP_PATH}/${DB_NAME}.backup"'
-    sqlite3 "${SOURCE_PATH}/${DB_PATH}" '.restore "${SOURCE_TEMP_PATH}/${DB_NAME}.backup"'
+    sqlite3 "${TEMP_PATH}/${DB_NAME}" 'PRAGMA wal_checkpoint(TRUNCATE);'
+    sqlite3 "${TEMP_PATH}/${DB_NAME}" '.backup "${TEMP_PATH}/${DB_NAME}.backup"'
+    sqlite3 "${DB_PATH}/${DB_PATH}" '.restore "${TEMP_PATH}/${DB_NAME}.backup"'
 
-    rm -Rf "${SOURCE_TEMP_PATH}"
+    rm -Rf "${TEMP_PATH}"
     debug_echo "Restore done."
 
     # if [ -n "$AFTER_RESTORE_COMMAND" ]; then
