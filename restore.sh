@@ -43,26 +43,23 @@ while true; do
     litestream restore -o "${SOURCE_TEMP_PATH}/${DB_NAME}" "${REPLICA_PATH}"
     
     sqlite3 "${SOURCE_TEMP_PATH}/${DB_NAME}" 'PRAGMA wal_checkpoint(TRUNCATE);'
-    
-    ln -sfn "${SOURCE_TEMP_PATH}" "${DB_PATH}"
-
-    cp -fRp "${SOURCE_TEMP_PATH}" "${SOURCE_PATH}"
-    ln -sfn "${SOURCE_PATH}" "${DB_PATH}"
+    sqlite3 "${SOURCE_TEMP_PATH}/${DB_NAME}" '.backup "${SOURCE_TEMP_PATH}/${DB_NAME}.backup"'
+    sqlite3 "${SOURCE_PATH}/${DB_PATH}" '.restore "${SOURCE_TEMP_PATH}/${DB_NAME}.backup"'
 
     rm -Rf "${SOURCE_TEMP_PATH}"
     debug_echo "Restore done."
 
-    if [ -n "$AFTER_RESTORE_COMMAND" ]; then
-        debug_echo "Executing after restore command: $AFTER_RESTORE_COMMAND"
-        eval "$AFTER_RESTORE_COMMAND"
-        if [ $? -ne 0 ]; then
-            debug_echo "After restore command execution failed with exit code $?."
-        else
-            debug_echo "After restore command execution completed successfully."
-        fi
-    else
-        debug_echo "No after restore command specified. Skipping execution."
-    fi
+    # if [ -n "$AFTER_RESTORE_COMMAND" ]; then
+    #     debug_echo "Executing after restore command: $AFTER_RESTORE_COMMAND"
+    #     eval "$AFTER_RESTORE_COMMAND"
+    #     if [ $? -ne 0 ]; then
+    #         debug_echo "After restore command execution failed with exit code $?."
+    #     else
+    #         debug_echo "After restore command execution completed successfully."
+    #     fi
+    # else
+    #     debug_echo "No after restore command specified. Skipping execution."
+    # fi
 
     last_execution_time=$(date +%s) # 실행 후 시작 시간 리셋
   else
