@@ -43,8 +43,7 @@ while true; do
     litestream restore -o "${TEMP_PATH}/${DB_NAME}" "${REPLICA_PATH}"
     
     sqlite3 "${TEMP_PATH}/${DB_NAME}" "PRAGMA wal_checkpoint(TRUNCATE);"
-    sqlite3 "${TEMP_PATH}/${DB_NAME}" ".backup ${TEMP_PATH}/${DB_NAME}.backup"
-    sqlite3 "${DB_PATH}/${DB_PATH}" ".restore ${TEMP_PATH}/${DB_NAME}.backup"
+    sqlite3 "${DB_PATH}/${DB_NAME}" ".restore ${TEMP_PATH}/${DB_NAME}"
 
     rm -Rf "${TEMP_PATH}"
     debug_echo "Restore done."
